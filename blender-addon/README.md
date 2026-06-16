@@ -1,0 +1,82 @@
+# PatternGen Importer (Blender add-on)
+
+Imports a PatternGen export (the `scene_name_pattern_gen.zip` produced by
+the app) into Blender as three emissive, alpha-blended image-sequence
+planes — one each for **titles**, **patterns** and **dots**.
+
+## Install
+
+1. In Blender: **Edit → Preferences → Add-ons → Install…**, pick
+   `patterngen_importer.py`, then tick the checkbox to enable it.
+2. Open the 3D Viewport's **N-panel** and find the **PatternGen** tab.
+
+Tested on Blender 3.4 and Blender 4.x.
+
+## Export your scene from the app first
+
+1. In PatternGen, click **EXPORT**. You'll get
+   `<sceneName>_pattern_gen.zip`.
+2. Unzip it — you should see three subfolders:
+   ```
+   <sceneName>_pattern_gen/
+     titles/
+     patterns/
+     dots/
+   ```
+
+## Import into Blender
+
+1. In the **PatternGen** tab, set **Scene Folder** to the unzipped
+   folder (the one that contains `titles/`, `patterns/`, `dots/`).
+2. Click **Import Scene Folders**.
+
+Three planes are created at the origin:
+
+| Layer     | Cyclic | Location (m)   | Rotation         | Scale       |
+| --------- | ------ | -------------- | ---------------- | ----------- |
+| titles    | off    | (0, 0, 0)      | 90° on X         | 6 × 6 × 6   |
+| patterns  | off    | (0, 0.1, 0)    | 90° on X         | 6 × 6 × 6   |
+| dots      | **on** | (0, 0.2, 0)    | 90° on X         | 6 × 6 × 6   |
+
+Each plane gets a material with these nodes:
+
+```
+Image Texture (SEQUENCE, auto-refresh on)
+  Color ─┬─► Principled BSDF › Base Color
+         └─► Principled BSDF › Emission Color (strength = 1)
+  Alpha ───► Principled BSDF › Alpha
+```
+
+Image sequence settings applied to every layer:
+
+- **Start Frame** — `0`
+- **Frames** — number of PNGs found in the folder
+- **Offset** — `0`
+- **Auto Refresh** — on
+- **Cyclic** — on for `dots`, off for `titles` and `patterns`
+
+The plane mesh itself is stretched to the image's aspect ratio
+(16 : 9 for PatternGen exports), so the object scale stays uniform.
+
+## Sync Start Frame across selected planes
+
+1. Select the plane(s) you want to nudge (usually all three: click one,
+   then `Shift`-click the others, or press `A` to select all).
+2. In the **Sync Start Frame** section of the panel, type the new
+   timeline **Start Frame** value.
+3. Click **Apply to Selected**. Every image-sequence texture on the
+   selected meshes is updated at once.
+
+The status line shows how many sequences are about to be affected so you
+know what you're pointing at before clicking.
+
+## Notes
+
+- The add-on creates materials with `blend_method = 'BLEND'` so that the
+  alpha channel renders cleanly in Eevee / Cycles. If you see
+  sort-order artifacts, switch individual materials to `HASHED`.
+- Re-importing into the same scene does not delete old planes — Blender
+  will just suffix new objects with `.001`, `.002`, etc. Delete the
+  old group manually if you want a clean re-import.
+- The 0.1 m spacing between layers is just there to avoid z-fighting.
+  Move the planes along any axis that fits your camera setup.
